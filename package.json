@@ -1,14 +1,12 @@
 {
   "name": "mcgl",
   "version": "0.0.1",
-  "description": "WebGL 3D toolkit",
+  "description": "",
   "main": "dist/mcgl.js",
   "directories": {
     "example": "examples"
   },
   "scripts": {
-    "lint": "eslint -c .eslintrc src/**",
-    "lint:fix": "eslint -c .eslintrc --fix src/**",
     "start": "webpack-dev-server",
     "dev": "NODE_ENV=development webpack-dev-server --hot --inline --host 0.0.0.0 --colors --error-details --content-base test --port 8158",
     "build": "NODE_ENV=production webpack --progress --colors --error-details"
@@ -16,8 +14,8 @@
   "author": "Clement Chenebault",
   "license": "MIT",
   "dependencies": {
+    "babel-runtime": "^6.18.0",
     "gl-matrix": "2.3.2",
-    "scheduling": "1.0.3",
     "parse-dds": "^1.2.1"
   },
   "repository": {

@@ -1,4 +1,4 @@
-import Matrices from './utils/Matrices'
+import Matrices from '../utils/Matrices'
 
 class Camera {
   constructor(){

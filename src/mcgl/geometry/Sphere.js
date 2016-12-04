@@ -4,7 +4,7 @@ import Mesh from './Mesh';
 let gl, pivotX, pivotY, axis;
 
 class Sphere extends Mesh {
-  constructor(program, nbVert, radius, attribPositionName = "a_position", drawMode = GL.gl.TRIANGLES){
+  constructor(program, nbVert, radius, attribPositionName = "a_position", drawMode = mcgl.GL.gl.TRIANGLES){
 
     super(program, drawMode)
     this.attribPositionName = attribPositionName;
