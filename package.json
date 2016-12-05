@@ -2,7 +2,7 @@
   "name": "mcgl",
   "version": "0.0.1",
   "description": "",
-  "main": "dist/mcgl.js",
+  "main": "src/Mcgl.js",
   "directories": {
     "example": "examples"
   },

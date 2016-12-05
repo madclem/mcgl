@@ -86,7 +86,6 @@ class OrbitalControl {
     if(!this.speed[0]) this.speed[0] = 0;
     if(!this.speed[1]) this.speed[1] = 0;
 
-    console.log(this.speed[0], this.speed[1]);
     this.previousTime = Date.now();
     this.previousPos[0] = this.currentPos[0];
     this.previousPos[1] = this.currentPos[1];

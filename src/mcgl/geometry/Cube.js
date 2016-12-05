@@ -1,38 +1,22 @@
 import mcgl, {GL} from 'mcgl';
+import Mesh from './Mesh';
 
 let gl, pivotX, pivotY, axis;
 
-class Cube {
-  constructor(program, w, h, d){
+class Cube extends Mesh {
+  constructor(program, w=10, h=10, d=10, drawMode = mcgl.GL.gl.TRIANGLES){
 
-    gl = GL.gl;
+    super(program, drawMode)
 
-    this.position = [0,0,0];
+    gl = mcgl.GL.gl;
     this.width = w;
     this.height = h;
     this.depth = d;
-    this.program = program;
-
-    this.normalBuffer = gl.createBuffer();
-    this.vertexBuffer = gl.createBuffer();
-    this.indexBuffer = gl.createBuffer();
 
     this.cube();
-
-
-    this.positionLocation = gl.getAttribLocation(this.program, "a_position");
-    gl.enableVertexAttribArray(this.positionLocation);
-    gl.vertexAttribPointer(this.positionLocation, 3, gl.FLOAT, false, 0, 0)
-
-    this.normalLocation = gl.getAttribLocation(this.program, "a_normal");
-    gl.enableVertexAttribArray(this.normalsLocation);
-    gl.vertexAttribPointer(this.normalsLocation, 3, gl.FLOAT, false, 0, 0)
-
   }
 
   cube(){
-
-
     const x = this.width / 2;
   	const y = this.height / 2;
   	const z = this.depth / 2;
@@ -194,57 +178,26 @@ class Cube {
 
 	// count ++;
 
-    var tempPos = []
-    var tempNormals = []
-    for (var i = 0; i < positions.length; i++) {
-      for (var j = 0; j < positions[i].length; j++) {
-        tempPos.push(positions[i][j])
-        tempNormals.push(normals[i][j])
-      }
-    }
+    // var tempPos = []
+    // var tempNormals = []
+    // for (var i = 0; i < positions.length; i++) {
+    //   for (var j = 0; j < positions[i].length; j++) {
+    //     tempPos.push(positions[i][j])
+    //     tempNormals.push(normals[i][j])
+    //   }
+    // }
 
     // var pos = new Float32Array(positions);
-    var pos = new Float32Array(tempPos);
-    var norms = new Float32Array(tempNormals);
+    // var pos = new Float32Array(tempPos);
+    // var norms = new Float32Array(tempNormals);
 
-    this.bufferNormals(norms);
-    this.bufferVertex(pos);
-    this.bufferIndices(indices);
-  }
-
-  bufferNormals(normals){
-    this.normals = normals;
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, normals, gl.STATIC_DRAW);
-
-    gl.enableVertexAttribArray(this.normalsLocation);
-    gl.vertexAttribPointer(this.normalsLocation, 3, gl.FLOAT, false, 0, 0)
-  }
-
-  bufferIndices(indices){
-    this.indices = indices;
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-  }
-
-  bufferVertex(vertices){
-    this.vertices = vertices;
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
-
-    gl.enableVertexAttribArray(this.positionLocation);
-    gl.vertexAttribPointer(this.positionLocation, 3, gl.FLOAT, false, 0, 0)
+    this.bufferNormal(normals);
+    this.bufferVertex(positions);
+    this.bufferIndex(indices);
+    this.bufferTexCoord(coords);
   }
 
   render(){
-    this.cube();
-    // this.positionLocation = gl.getAttribLocation(this.program, "a_position");
-
-
-    // gl.enableVertexAttribArray(this.normalLocation);
-    // gl.vertexAttribPointer(this.normalLocation, 3, gl.FLOAT, false, 0, 0)
-
-    gl.drawElements(gl.TRIANGLES, (6 * 6), gl.UNSIGNED_SHORT, this.indexBuffer, 0);
   }
 }
 
