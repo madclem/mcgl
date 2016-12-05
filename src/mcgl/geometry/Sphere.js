@@ -5,7 +5,6 @@ let gl, pivotX, pivotY, axis;
 
 class Sphere extends Mesh {
   constructor(program, nbVert, radius, attribPositionName = "a_position", drawMode = mcgl.GL.gl.TRIANGLES){
-
     super(program, drawMode)
     this.attribPositionName = attribPositionName;
 

@@ -1,12 +1,16 @@
 // import GL from '../../GLHelpers';
+import mcgl, {GL} from 'mcgl';
 
 let gl;
 
 class Mesh {
   constructor(program, drawingType = 4){
+
+
     this.program = program;
 
-    gl = GL.gl;
+    // console.log("----@)", GL, mcgl);
+    gl = mcgl.GL.gl;
 
     this.position = [0,0,0];
     this.rotation = [0,0,0];

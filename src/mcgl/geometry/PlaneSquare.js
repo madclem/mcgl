@@ -6,11 +6,9 @@ let gl, pivotX, pivotY, axis;
 
 class PlaneSquare extends Mesh {
   constructor(program, w, h, subdivision, axis, attribPositionName = "a_position", drawMode){
-
-    drawMode = drawMode || GL.gl.POINTS;
+    drawMode = drawMode || mcgl.GL.gl.POINTS;
     super(program, drawMode);
-
-    gl = GL.gl;
+    gl = mcgl.GL.gl;
 
     this.attribPositionName = attribPositionName;
 

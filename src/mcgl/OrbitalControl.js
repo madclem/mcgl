@@ -1,4 +1,5 @@
-import Matrices from './utils/Matrices'
+// import Matrices from './utils/Matrices'
+import glmatrix from 'gl-matrix'
 
 class OrbitalControl {
   constructor(){
@@ -11,6 +12,8 @@ class OrbitalControl {
     this.angleA = 0;
     this.angleB = 0;
     this.tr = 0;
+
+    this.m = glmatrix.mat4.create();
   }
 
   update(){
@@ -19,8 +22,7 @@ class OrbitalControl {
     this.tr = Math.cos(this.angleB) * this.radius;
     this.position[0] = Math.cos(this.angleA) * this.tr;
     this.position[2] = Math.sin(this.angleA) * this.tr;
-
-    this.position = Matrices.addVectors(this.position, this.offsetPosition);
+    glmatrix.vec3.add(this.position, this.position, this.offsetPosition);
   }
 }
 

@@ -81,7 +81,8 @@ module.exports = {
     root: __dirname + "/src",
     fallback: "node_modules",
     alias: {
-      'mcgl'    : __dirname + "/src/Mcgl.js"
+      'mcgl'    : __dirname + "/src/Mcgl.js",
+      'gl-matrix'    : "gl-matrix"
     }
   },
   plugins: prod ? [
