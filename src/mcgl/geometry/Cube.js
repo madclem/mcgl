@@ -4,11 +4,12 @@ import Mesh from './Mesh';
 let gl, pivotX, pivotY, axis;
 
 class Cube extends Mesh {
-  constructor(program, w=10, h=10, d=10, drawMode = mcgl.GL.gl.TRIANGLES){
+  constructor(program, w=10, h=10, d=10, multiFace = false, drawMode = mcgl.GL.gl.TRIANGLES){
 
     super(program, drawMode)
 
     gl = mcgl.GL.gl;
+    this.multiFace = multiFace;
     this.width = w;
     this.height = h;
     this.depth = d;
@@ -39,10 +40,18 @@ class Cube extends Mesh {
   	normals.push([0, 0, -1]);
   	normals.push([0, 0, -1]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([0, 0]);
+    	coords.push([1/4, 0]);
+    	coords.push([1/4, 1/2]);
+    	coords.push([0, 1/2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
@@ -64,10 +73,18 @@ class Cube extends Mesh {
   	normals.push([1, 0, 0]);
   	normals.push([1, 0, 0]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([1/4, 0]);
+    	coords.push([1/4 * 2, 0]);
+    	coords.push([1/4 * 2, 1/2]);
+    	coords.push([1/4, 1/2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
@@ -89,10 +106,18 @@ class Cube extends Mesh {
   	normals.push([0, 0, 1]);
   	normals.push([0, 0, 1]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([1/4 * 2, 0]);
+    	coords.push([1/4 * 3, 0]);
+    	coords.push([1/4 * 3, 1/2]);
+    	coords.push([1/4 * 2, 1/2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
@@ -114,10 +139,18 @@ class Cube extends Mesh {
   	normals.push([-1, 0, 0]);
   	normals.push([-1, 0, 0]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([0, 1/2]);
+    	coords.push([1/4, 1/2]);
+    	coords.push([1/4, 1/2 * 2]);
+    	coords.push([0, 1/2 * 2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
@@ -139,10 +172,18 @@ class Cube extends Mesh {
   	normals.push([0, 1, 0]);
   	normals.push([0, 1, 0]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([1/4, 1/2]);
+    	coords.push([1/4 * 2, 1/2]);
+    	coords.push([1/4 * 2, 1/2 * 2]);
+    	coords.push([1/4, 1/2 * 2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
@@ -164,10 +205,18 @@ class Cube extends Mesh {
   	normals.push([0, -1, 0]);
   	normals.push([0, -1, 0]);
 
-  	coords.push([0, 0]);
-  	coords.push([1, 0]);
-  	coords.push([1, 1]);
-  	coords.push([0, 1]);
+    if(this.multiFace){
+      coords.push([1/4 * 2, 1/2]);
+    	coords.push([1/4 * 3, 1/2]);
+    	coords.push([1/4 * 3, 1/2 * 2]);
+    	coords.push([1/4 * 2, 1/2 * 2]);
+    }
+    else {
+      coords.push([0, 0]);
+      coords.push([1, 0]);
+      coords.push([1, 1]);
+      coords.push([0, 1]);
+    }
 
   	indices.push(count * 4 + 0);
   	indices.push(count * 4 + 1);
