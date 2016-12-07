@@ -30,9 +30,9 @@ class Mesh {
   }
 
 
-  bufferVertex(mArrayVertices, isDynamic = false, posAttribName = "a_position") {
+  bufferVertex(mArrayVertices, isDynamic = false, posAttribName = "a_position", mIsFlatten = false) {
 		this._vertexSize = mArrayVertices.length;
-		this.bufferData(mArrayVertices, posAttribName, 3, isDynamic);
+		this.bufferData(mArrayVertices, posAttribName, 3, isDynamic, mIsFlatten);
 		this._vertices = mArrayVertices;
 	}
 
@@ -66,11 +66,11 @@ class Mesh {
 		this.iBuffer.numItems = mArrayIndices.length;
 	}
 
-  bufferData(mData, mName, mItemSize, isDynamic = false) {
+  bufferData(mData, mName, mItemSize, isDynamic = false, mIsFlatten = false) {
 		let index = -1;
 		let i = 0;
 		const drawType   = isDynamic ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW;
-		const bufferData = [];
+		let bufferData = [];
 		let buffer;
 		let dataArray;
 		if (!mItemSize) {	mItemSize = mData[0].length; }
@@ -84,10 +84,14 @@ class Mesh {
 			}
 		}
 
-		//	flatten buffer data
-		for(i = 0; i < mData.length; i++) {
-			for(let j = 0; j < mData[i].length; j++) {
-				bufferData.push(mData[i][j]);
+    //	flatten buffer data
+		if(mIsFlatten) {
+			bufferData = mData;
+		} else {
+			for(i = 0; i < mData.length; i++) {
+				for(let j = 0; j < mData[i].length; j++) {
+					bufferData.push(mData[i][j]);
+				}
 			}
 		}
 
