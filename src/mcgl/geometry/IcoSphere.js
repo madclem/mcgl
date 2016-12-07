@@ -3,7 +3,7 @@ import mcgl, {GL} from 'mcgl';
 import Mesh from './Mesh';
 
 let gl, pivotX, pivotY, axis;
-let index = 0;
+let indexUniq = 0;
 let vertices = [];
 let indices = [];
 let middlePointIndexCache = {}
@@ -26,7 +26,7 @@ class IcoSphere extends Mesh {
     let faces = [];
     // let vertices = [];
     let indices = [];
-    let radius = 100;
+    let radius = 1;
     // create 12 vertices of a icosahedron
     var t = (1.0 + Math.sqrt(5.0)) / 2.0 * radius;
 
@@ -88,6 +88,7 @@ class IcoSphere extends Mesh {
       for (var k = 0; k < faces.length; k++) {
         let tri = faces[k];
 
+
         let a = this.getMiddlePoint(tri[0], tri[1]);
         let b = this.getMiddlePoint(tri[1], tri[2]);
         let c = this.getMiddlePoint(tri[2], tri[0]);
@@ -101,32 +102,82 @@ class IcoSphere extends Mesh {
       faces = faces2.slice();
     }
 
+
+    console.log("vertices.length", vertices.length);
     let pos = [];
 
-    for (var i = 0; i < vertices.length; i++) {
-      let v = vertices[i];
+    let vertexComplex = [];
+    let indicesComplex = [];
+
+
+
+    //Process the triangles
+   let oldVerts = vertices.slice();
+  //  let triangles = faces.slice();
+
+   let triangles = [];
+   let ind = [];
+   for (var i = 0; i < faces.length; i++) {
+     triangles.push(faces[i][0], faces[i][1], faces[i][2]);
+     ind.push(faces[i][0], faces[i][1], faces[i][2]);
+   }
+
+   let newVertices = []//new Float32Array(triangles.length);
+   for (let i = 0; i < triangles.length; i++) {
+     newVertices[i] = oldVerts[triangles[i]].slice();
+     triangles[i] = i;
+   }
+
+   console.log("newVertices.length", newVertices.length);
+   console.log("triangles.length", triangles.length);
+
+  //  mesh.vertices = vertices;
+  //  mesh.triangles = triangles;
+
+    // let indexInd = 0;
+    // for (var i = 0; i < ind.length; i++) {
+    //   let index = ind[i];
+    //
+    //   vertexComplex.push(vertices[index]);
+    //   indicesComplex.push(indexInd++);
+    // }
+
+    for (var i = 0; i < newVertices.length; i++) {
+      let v = newVertices[i];
       v[0] *= 100;
       v[1] *= 100;
       v[2] *= 100;
     }
 
-    let ind = [];
-    for (var i = 0; i < faces.length; i++) {
-      ind.push(faces[i][0], faces[i][1], faces[i][2]);
-    }
-    console.log(vertices.length);
-    this.bufferIndex(ind);
-    this.bufferVertex(vertices, false, this.attribPositionName);
+
+
+
+    this.bufferIndex(triangles);
+    this.bufferVertex(newVertices, false, this.attribPositionName);
   }
 
   addVertex(position)
   {
     let length = Math.sqrt(position[0] * position[0] + position[1] * position[1] + position[2] * position[2]);
+
+    console.log(length);
     vertices.push([position[0]/length, position[1]/length, position[2]/length]);
 
-    return index++;
+    return indexUniq++;
   }
 
+  find(object, key){
+    // console.log("key", key);
+    for (var variable in object) {
+      // console.log("variable", variable, object[variable]);
+      if(variable == key){
+        // console.log("should be there");
+        return true;
+      }
+    }
+
+    return false;
+  }
   getMiddlePoint(p1, p2) {
     let firstPointIsSmaller = p1 < p2;
     let smallerIndex = firstPointIsSmaller ? p1 : p2;
@@ -134,10 +185,16 @@ class IcoSphere extends Mesh {
     let key = (smallerIndex << 32) + greaterIndex;
     // console.log(key);
     // console.log(smallerIndex, smallerIndex<<32);
-    let foundValueIterator = middlePointIndexCache[key];
-    if(foundValueIterator)
+
+
+    // let foundValueIterator = middlePointIndexCache[key];
+    let isIn = this.find(middlePointIndexCache, key)
+    // console.log(isIn);
+    // console.log("if " + key + " in ", middlePointIndexCache);
+    if (key in middlePointIndexCache)
     {
-      // return foundValueIterator;
+      // console.log("here");
+      // return key;
     }
 
     let point1 = vertices[p1];

@@ -19,7 +19,7 @@ class OrbitalControl {
     this.bounds = [
       [-1000, 1000],
       [-1000, 1000],
-      [100, 10000]
+      [1, 10000]
     ]
 
     // properties scroll
