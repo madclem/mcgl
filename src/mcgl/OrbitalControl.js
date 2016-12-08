@@ -13,6 +13,8 @@ class OrbitalControl {
     this.prevRx = null;
 		this.prevRy = null;
 
+    this.rxT = 0;
+    this.ryT = 0;
     this.ry = 0;
     this.rx = 0;
     this.tr = 0;
@@ -81,8 +83,8 @@ class OrbitalControl {
 
     this.prevMouse = [e.clientX, e.clientY]
 
-    this.prevRx = this.rx;
-		this.prevRy = this.ry;
+    this.prevRx = this.rxT = this.rx;
+		this.prevRy = this.ryT = this.ry;
   }
 
   onMove(e){
@@ -99,11 +101,11 @@ class OrbitalControl {
     // this.previousPos[0] = this.currentPos[0];
     // this.previousPos[1] = this.currentPos[1];
     let diffX = -(this.currentPos[0] - this.prevMouse[0]);
-		this.ry = this.prevRy - diffX * 0.005;
+		this.ryT = this.prevRy - diffX * 0.005;
 
 
 		let diffY = -(this.currentPos[1] - this.prevMouse[1]);
-		this.rx = this.prevRx - diffY * 0.005;
+		this.rxT = this.prevRx - diffY * 0.005;
   }
 
   onUp(e){
@@ -156,6 +158,9 @@ class OrbitalControl {
     if(this.autoRotation){
       this.ry += 0.004;
     }
+
+    this.ry += (this.ryT - this.ry) * (this.isDown ? .1 : 0.03);
+    this.rx += (this.rxT - this.rx) * (this.isDown ? .1 : 0.03);
     //
     // if(!this.isDown) {
     //   this.speed[0] *= .9;
