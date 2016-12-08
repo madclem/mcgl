@@ -3,14 +3,18 @@ import glmatrix from 'gl-matrix'
 
 class OrbitalControl {
   constructor(){
-    this.position = [0, 450, 0];
+    this.position = [0, 100, 0];
     this._position = [0, 0, 0];
     this.target = [0, 0, 0];
     this.up = [0, 1, 0];
     this.radius = 800;
 
-    this.angleA = 0;
-    this.angleB = 0;
+    this.prevMouse = [null, null]
+    this.prevRx = null;
+		this.prevRy = null;
+
+    this.ry = 0;
+    this.rx = 0;
     this.tr = 0;
     this.locked = false;
     this.autoRotation = false;
@@ -32,7 +36,7 @@ class OrbitalControl {
 
 
 
-    this.m = glmatrix.mat4.create();
+    // this.m = glmatrix.mat4.create();
   }
 
   getSpeed() {
@@ -74,6 +78,11 @@ class OrbitalControl {
 
   onDown(e){
     this.isDown = true;
+
+    this.prevMouse = [e.clientX, e.clientY]
+
+    this.prevRx = this.rx;
+		this.prevRy = this.ry;
   }
 
   onMove(e){
@@ -82,13 +91,19 @@ class OrbitalControl {
 
     this.currentPos = [e.clientX, e.clientY];
 
-    this.speed = this.getSpeed();
-    if(!this.speed[0]) this.speed[0] = 0;
-    if(!this.speed[1]) this.speed[1] = 0;
+    // this.speed = this.getSpeed();
+    // if(!this.speed[0]) this.speed[0] = 0;
+    // if(!this.speed[1]) this.speed[1] = 0;
 
-    this.previousTime = Date.now();
-    this.previousPos[0] = this.currentPos[0];
-    this.previousPos[1] = this.currentPos[1];
+    // this.previousTime = Date.now();
+    // this.previousPos[0] = this.currentPos[0];
+    // this.previousPos[1] = this.currentPos[1];
+    let diffX = -(this.currentPos[0] - this.prevMouse[0]);
+		this.ry = this.prevRy - diffX * 0.005;
+
+
+		let diffY = -(this.currentPos[1] - this.prevMouse[1]);
+		this.rx = this.prevRx - diffY * 0.005;
   }
 
   onUp(e){
@@ -139,22 +154,22 @@ class OrbitalControl {
   update(){
 
     if(this.autoRotation){
-      this.angleA += 0.004;
+      this.ry += 0.004;
     }
+    //
+    // if(!this.isDown) {
+    //   this.speed[0] *= .9;
+    //   this.speed[1] *= .9;
+    // }
+    //
+    // this.ry -= this.speed[0]/ 100;
+    // this.rx -= this.speed[1]/ 100;
 
-    if(!this.isDown) {
-      this.speed[0] *= .9;
-      this.speed[1] *= .9;
-    }
+    this._position[1] = Math.sin(this.rx) * this.radius;
 
-    this.angleA -= this.speed[0]/ 100;
-    this.angleB -= this.speed[1]/ 100;
-
-    this._position[1] = Math.sin(this.angleB) * this.radius;
-
-    this.tr = Math.cos(this.angleB) * this.radius;
-    this._position[0] = Math.cos(this.angleA) * this.tr;
-    this._position[2] = Math.sin(this.angleA) * this.tr;
+    const tr = Math.cos(this.rx) * this.radius;
+    this._position[0] = Math.cos(this.ry + Math.PI * 0.5) * tr;
+    this._position[2] = Math.sin(this.ry + Math.PI * 0.5) * tr;
     glmatrix.vec3.add(this._position, this._position, this.position);
   }
 }

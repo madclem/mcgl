@@ -83,7 +83,7 @@ class IcoSphere extends Mesh {
     faces.push([9, 8, 1]);
 
 
-    for (var i = 0; i < 2; i++) {
+    for (var i = 0; i < 4; i++) {
       let faces2 = [];
       for (var k = 0; k < faces.length; k++) {
         let tri = faces[k];
@@ -194,7 +194,8 @@ class IcoSphere extends Mesh {
     if (key in middlePointIndexCache)
     {
       // console.log("here");
-      // return key;
+      console.log(key);
+      // return middlePointIndexCache[key];
     }
 
     let point1 = vertices[p1];
