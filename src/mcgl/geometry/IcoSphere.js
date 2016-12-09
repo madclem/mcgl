@@ -47,12 +47,6 @@ class IcoSphere extends Mesh {
     this.addVertex([-t,  0, -1 * radius]);
     this.addVertex([-t,  0,  1 * radius]);
 
-
-
-
-
-
-
     // create 20 triangles of the icosahedron
     // 5 faces around point 0
     faces.push([0, 11, 5]);
@@ -103,18 +97,12 @@ class IcoSphere extends Mesh {
     }
 
 
-    console.log("vertices.length", vertices.length);
     let pos = [];
-
     let vertexComplex = [];
     let indicesComplex = [];
 
-
-
     //Process the triangles
    let oldVerts = vertices.slice();
-  //  let triangles = faces.slice();
-
    let triangles = [];
    let ind = [];
    for (var i = 0; i < faces.length; i++) {
@@ -128,29 +116,14 @@ class IcoSphere extends Mesh {
      triangles[i] = i;
    }
 
-   console.log("newVertices.length", newVertices.length);
-   console.log("triangles.length", triangles.length);
 
-  //  mesh.vertices = vertices;
-  //  mesh.triangles = triangles;
-
-    // let indexInd = 0;
-    // for (var i = 0; i < ind.length; i++) {
-    //   let index = ind[i];
-    //
-    //   vertexComplex.push(vertices[index]);
-    //   indicesComplex.push(indexInd++);
-    // }
-
+   // TODO to clean, shouldnt be here
     for (var i = 0; i < newVertices.length; i++) {
       let v = newVertices[i];
-      v[0] *= 100;
-      v[1] *= 100;
-      v[2] *= 100;
+      v[0] *= 400;
+      v[1] *= 400;
+      v[2] *= 400;
     }
-
-
-
 
     this.bufferIndex(triangles);
     this.bufferVertex(newVertices, false, this.attribPositionName);
@@ -159,19 +132,14 @@ class IcoSphere extends Mesh {
   addVertex(position)
   {
     let length = Math.sqrt(position[0] * position[0] + position[1] * position[1] + position[2] * position[2]);
-
-    console.log(length);
     vertices.push([position[0]/length, position[1]/length, position[2]/length]);
 
     return indexUniq++;
   }
 
   find(object, key){
-    // console.log("key", key);
     for (var variable in object) {
-      // console.log("variable", variable, object[variable]);
       if(variable == key){
-        // console.log("should be there");
         return true;
       }
     }
@@ -183,20 +151,12 @@ class IcoSphere extends Mesh {
     let smallerIndex = firstPointIsSmaller ? p1 : p2;
     let greaterIndex = firstPointIsSmaller ? p2 : p1;
     let key = (smallerIndex << 32) + greaterIndex;
-    // console.log(key);
-    // console.log(smallerIndex, smallerIndex<<32);
-
-
-    // let foundValueIterator = middlePointIndexCache[key];
     let isIn = this.find(middlePointIndexCache, key)
-    // console.log(isIn);
-    // console.log("if " + key + " in ", middlePointIndexCache);
-    if (key in middlePointIndexCache)
-    {
-      // console.log("here");
-      console.log(key);
+
+    // if (key in middlePointIndexCache)
+    // {
       // return middlePointIndexCache[key];
-    }
+    // }
 
     let point1 = vertices[p1];
     let point2 = vertices[p2];
@@ -206,9 +166,8 @@ class IcoSphere extends Mesh {
       (point1[2] + point2[2]) / 2.0];
 
     let i = this.addVertex(middle);
-
     middlePointIndexCache[key] = i;
-  // this.middlePointIndexCache.insert(std::make_pair(key, i));
+
     return i;
   }
 

@@ -79,10 +79,15 @@ class OrbitalControl {
   }
 
   onDown(e){
+    if(e.touches) {
+      console.log(e.touches[0].pageX, e.touches[0].pageY);
+      this.prevMouse = [e.touches[0].pageX, e.touches[0].pageY]
+	  }
+    else {
+      this.prevMouse = [e.clientX, e.clientY]
+	  }
+
     this.isDown = true;
-
-    this.prevMouse = [e.clientX, e.clientY]
-
     this.prevRx = this.rxT = this.rx;
 		this.prevRy = this.ryT = this.ry;
   }
@@ -91,7 +96,13 @@ class OrbitalControl {
 
     if(!this.isDown) return;
 
-    this.currentPos = [e.clientX, e.clientY];
+    if(e.touches) {
+      this.currentPos = [e.touches[0].pageX, e.touches[0].pageY]
+	  }
+    else {
+      this.currentPos = [e.clientX, e.clientY];
+	  }
+
 
     // this.speed = this.getSpeed();
     // if(!this.speed[0]) this.speed[0] = 0;
@@ -132,8 +143,11 @@ class OrbitalControl {
     window.addEventListener('mousewheel', this.onScroll.bind(this));
     window.addEventListener('DOMMouseScroll', this.onScroll.bind(this));
     window.addEventListener('mousedown',this.onDown.bind(this), false);
+    window.addEventListener('touchstart',this.onDown.bind(this), false);
     window.addEventListener('mousemove', this.onMove.bind(this), false);
+    window.addEventListener('touchmove', this.onMove.bind(this), false);
     window.addEventListener('mouseup', this.onUp.bind(this), false)
+    window.addEventListener('touchend', this.onUp.bind(this), false)
   }
 
   _removeEvents(){
@@ -142,6 +156,9 @@ class OrbitalControl {
     window.removeEventListener('mousedown',this.onDown.bind(this), false);
     window.removeEventListener('mousemove', this.onMove.bind(this), false);
     window.removeEventListener('mouseup', this.onUp.bind(this), false)
+    window.removeEventListener('touchstart',this.onDown.bind(this), false);
+    window.removeEventListener('touchmove', this.onMove.bind(this), false);
+    window.removeEventListener('touchend', this.onUp.bind(this), false)
   }
 
   set auto(val){
