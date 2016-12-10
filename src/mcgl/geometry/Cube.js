@@ -1,15 +1,20 @@
 import mcgl, {GL} from 'mcgl';
 import Mesh from './Mesh';
+import FacesMultiplicator from '../utils/FacesMultiplicator';
+import FacesSeparator from '../utils/FacesSeparator';
 
 let gl, pivotX, pivotY, axis;
 
 class Cube extends Mesh {
-  constructor(program, w=10, h=10, d=10, multiFace = false, drawMode = mcgl.GL.gl.TRIANGLES){
+  constructor(program, w=10, h=10, d=10, multiFace = false, subdivision, drawMode = mcgl.GL.gl.TRIANGLES){
 
     super(program, drawMode)
 
+    subdivision = subdivision || 0;
     gl = mcgl.GL.gl;
     this.multiFace = multiFace;
+
+    this.subdivision = subdivision;
     this.width = w;
     this.height = h;
     this.depth = d;
@@ -225,24 +230,23 @@ class Cube extends Mesh {
   	indices.push(count * 4 + 2);
   	indices.push(count * 4 + 3);
 
-	// count ++;
+    let ind = []
 
-    // var tempPos = []
-    // var tempNormals = []
-    // for (var i = 0; i < positions.length; i++) {
-    //   for (var j = 0; j < positions[i].length; j++) {
-    //     tempPos.push(positions[i][j])
-    //     tempNormals.push(normals[i][j])
-    //   }
-    // }
+    for (var i = 0; i < indices.length; i+=3) {
+      ind.push([indices[i], indices[i+1], indices[i+2]])
+    }
 
-    // var pos = new Float32Array(positions);
-    // var pos = new Float32Array(tempPos);
-    // var norms = new Float32Array(tempNormals);
+    // TODO this is a temporary fix
+    let faces = FacesMultiplicator.multiplyTriangles(1, ind, positions);
+    let l = positions.length - coords.length
+    for (var i = 0; i < l; i++) {
+      coords.push([0, 0]);
+      normals.push([0, -1, 0]);
+    }
 
     this.bufferNormal(normals);
     this.bufferVertex(positions);
-    this.bufferIndex(indices);
+    this.bufferIndex(faces);
     this.bufferTexCoord(coords);
   }
 
