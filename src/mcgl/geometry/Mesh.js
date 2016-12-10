@@ -56,10 +56,24 @@ class Mesh {
 	bufferIndex(mArrayIndices, isDynamic = false) {
 
 		const drawType        = isDynamic ? gl.DYNAMIC_DRAW : gl.STATIC_DRAW;
-		this._indices         = mArrayIndices;
 		if (!this.iBuffer) {
 			this.iBuffer      = gl.createBuffer();
 		}
+
+    if(Array.isArray(mArrayIndices[0])){
+      let ind = [];
+      let index = 0;
+      for (var i = 0; i < mArrayIndices.length; i++) {
+        for (var k = 0; k < mArrayIndices[i].length; k++) {
+          ind[index++] = mArrayIndices[i][k];
+        }
+      }
+
+      mArrayIndices = ind;
+    }
+    
+    this._indices         = mArrayIndices;
+
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.iBuffer);
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(mArrayIndices), drawType);
 		this.iBuffer.itemSize = 1;
