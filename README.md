@@ -1,3 +1,3 @@
 # mcgl
-A WIP webgl framework heavily inspired by Wen's Alfrid (https://github.com/yiwenl/Alfrid). 
-Purpose is to learn and the name isn't related to any McDonald burger
+A simple WIP webgl framework, growing step by step depending of the needs at instant T!
+inspired by Wen's Alfrid (https://github.com/yiwenl/Alfrid). 
