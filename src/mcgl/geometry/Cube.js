@@ -237,7 +237,7 @@ class Cube extends Mesh {
     }
 
     // TODO this is a temporary fix
-    let faces = FacesMultiplicator.multiplyTriangles(1, ind, positions);
+    let faces = FacesMultiplicator.multiplyTriangles(this.subdivision, ind, positions);
     let l = positions.length - coords.length
     for (var i = 0; i < l; i++) {
       coords.push([0, 0]);
@@ -250,7 +250,11 @@ class Cube extends Mesh {
     this.bufferTexCoord(coords);
   }
 
-  render(){
+  render(sub, drawMode){
+    this.subdivision = sub;
+    this.drawType = drawMode;
+
+    this.cube();
   }
 }
 
