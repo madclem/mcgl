@@ -6,6 +6,7 @@ import OrbitalControl from "./mcgl/OrbitalControl";
 import Geom from "./mcgl/geometry/index-geom";
 import Controller from "./mcgl/utils/Controller";
 import Easings from "./mcgl/utils/Easings";
+import FBO from "./mcgl/FrameBuffer";
 
 class Mcgl {
   constructor(){
@@ -18,6 +19,7 @@ class Mcgl {
     this.Texture = Texture;
     this.Controller = Controller;
     this.Easings = Easings;
+    this.FBO = FBO;
   }
 }
 
