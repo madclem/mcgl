@@ -25,7 +25,7 @@ class OrbitalControl {
     this.bounds = [
       [-1000, 1000],
       [-1000, 1000],
-      [1, 10000]
+      [0, 10000]
     ]
 
     // properties scroll
@@ -168,6 +168,10 @@ class OrbitalControl {
     else {
       this._removeEvents();
     }
+  }
+
+  setRy(value){
+    this.prevRy = this.ryT = value;
   }
 
   update(){
