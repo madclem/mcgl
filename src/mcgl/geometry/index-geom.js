@@ -4,6 +4,7 @@ import PlaneSquare from "./PlaneSquare";
 import Sphere from "./Sphere";
 import IcoSphere from "./IcoSphere";
 import Line from "./Line";
+import BigTriangle from "./BigTriangle";
 
 const shapes = {
   Cube: Cube,
@@ -11,7 +12,8 @@ const shapes = {
   PlaneSquare: PlaneSquare,
   Sphere: Sphere,
   IcoSphere: IcoSphere,
-  Line: Line
+  Line: Line,
+  BigTriangle: BigTriangle
 }
 
 export default shapes;
