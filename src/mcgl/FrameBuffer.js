@@ -7,23 +7,35 @@ class FrameBuffer {
 
     gl = mcgl.GL.gl;
 
+    this.textures = [];
     this.frameBuffer = gl.createFramebuffer();
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
 
     this.texture = gl.createTexture();
+    this.gltexture = new mcgl.Texture(this.texture, true);
+
+    this.textures.push(this.gltexture)
+
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
 
     if (this.isPowerOf2(w) && this.isPowerOf2(h)) {
       gl.generateMipmap(gl.TEXTURE_2D);
     }
-    else {
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    var floatTextures = gl.getExtension('OES_texture_float');
+    if (!gl.getExtension("OES_texture_float")){
+      throw new Error( "float textures not supported" );
     }
 
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.FLOAT, null);
+    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.FLOAT, new Float32Array(w * h));
+    // gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, w, h, 0, gl.RGBA, gl.FLOAT, null);
 
 
     this.renderbuffer = gl.createRenderbuffer();
@@ -43,21 +55,22 @@ class FrameBuffer {
     return (value & (value - 1)) == 0;
   }
 
-  bind(w, h, toCanvas){
-    this.w = w;
-    this.h = h;
+  bind(w, h){
+    this.w = w || this.w;
+    this.h = h || this.h;
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
     gl.viewport(0, 0, this.w, this.h);
   }
 
   unbind(){
     gl.bindFramebuffer(gl.FRAMEBUFFER, null); // when set to null, draw to the canvas
-    gl.viewport(0, 0, this.w, this.h);
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   }
 
   clear(){
-    gl.bindFramebuffer(gl.FRAMEBUFFER, this.frameBuffer);
-    mcgl.GL.gl.clear(0,0,0,0);
+    this.bind();
+		gl.clear(0,0,0,0);
+		// this.unbind();
   }
 }
 
