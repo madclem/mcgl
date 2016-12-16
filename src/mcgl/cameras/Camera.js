@@ -1,80 +1,106 @@
 import Matrices from '../utils/Matrices'
+import glmatrix from 'gl-matrix';
 
 class Camera {
   constructor(){
     // camera
-    this.aspectRatio = Matrices.identity();
-    this.matrix = Matrices.identity();
-    this.projection = Matrices.identity();
-    this.position = [0,0,0];
+    this.aspectRatio = glmatrix.mat4.create();
+    this.matrix = glmatrix.mat4.create();
+    this.inverseViewMatrix = glmatrix.mat4.create();
+    this.projection = glmatrix.mat4.create();
+    this.orientation = glmatrix.mat4.create();
+    this.position = glmatrix.vec3.create();
   }
 
-  lookAt(target, up, dst) {
-    dst = dst || new Float32Array(16);
-    var zAxis = Matrices.normalize(
-        Matrices.subtractVectors(this.position, target));
-    var xAxis = Matrices.normalize(Matrices.cross(up, zAxis));
-    var yAxis = Matrices.normalize(Matrices.cross(zAxis, xAxis));
+  lookAt(target, up = [0, 1, 0]) {
+		// this.position = glmatrix.vec3.clone(position);
+		// this._center = glmatrix.vec3.clone(target);
 
-    dst[ 0] = xAxis[0];
-    dst[ 1] = xAxis[1];
-    dst[ 2] = xAxis[2];
-    dst[ 3] = 0;
-    dst[ 4] = yAxis[0];
-    dst[ 5] = yAxis[1];
-    dst[ 6] = yAxis[2];
-    dst[ 7] = 0;
-    dst[ 8] = zAxis[0];
-    dst[ 9] = zAxis[1];
-    dst[10] = zAxis[2];
-    dst[11] = 0;
-    dst[12] = this.position[0];
-    dst[13] = this.position[1];
-    dst[14] = this.position[2];
-    dst[15] = 1;
-
-    this.matrix = dst;
-
-
-    return dst;
-  }
+    glmatrix.mat4.identity(this.matrix);
+		glmatrix.mat4.lookAt(this.matrix, this.position, target, up);
+    // console.log(this.matrix);
+	}
 
   setAspectRatio(aspectRatio) {
 		this.aspectRatio = aspectRatio;
 		this.perspective(this.fov, aspectRatio, this.near, this.far);
 	}
 
-  perspective(fov, aspect, near, far, dst) {
+  // perspective(fov, aspect, near, far, dst) {
+  //   this.fov = fov;
+  //   this.near = near;
+  //   this.far = far;
+  //
+  //   dst = dst || new Float32Array(16);
+  //   var f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
+  //   var rangeInv = 1.0 / (near - far);
+  //
+  //   dst[ 0] = f / aspect;
+  //   dst[ 1] = 0;
+  //   dst[ 2] = 0;
+  //   dst[ 3] = 0;
+  //   dst[ 4] = 0;
+  //   dst[ 5] = f;
+  //   dst[ 6] = 0;
+  //   dst[ 7] = 0;
+  //   dst[ 8] = 0;
+  //   dst[ 9] = 0;
+  //   dst[10] = (near + far) * rangeInv;
+  //   dst[11] = -1;
+  //   dst[12] = 0;
+  //   dst[13] = 0;
+  //   dst[14] = near * far * rangeInv * 2;
+  //   dst[15] = 0;
+  //
+  //   // this.projection = Matrices.multiply(dst, Matrices.inverse(this.matrix)) ;
+  //
+  //   this.projection = dst;
+  //
+  //   return Matrices.multiply(dst, Matrices.inverse(this.matrix));
+  // }
+
+  perspective(fov, aspect, near, far) {
+
+    glmatrix.mat4.identity(this.matrix);
+		glmatrix.mat4.perspective(this.projection, fov, aspect, near, far);
+
     this.fov = fov;
     this.near = near;
     this.far = far;
+    this.aspect = aspect;
 
-    dst = dst || new Float32Array(16);
-    var f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
-    var rangeInv = 1.0 / (near - far);
+    // out, fovy, aspect, near, far
 
-    dst[ 0] = f / aspect;
-    dst[ 1] = 0;
-    dst[ 2] = 0;
-    dst[ 3] = 0;
-    dst[ 4] = 0;
-    dst[ 5] = f;
-    dst[ 6] = 0;
-    dst[ 7] = 0;
-    dst[ 8] = 0;
-    dst[ 9] = 0;
-    dst[10] = (near + far) * rangeInv;
-    dst[11] = -1;
-    dst[12] = 0;
-    dst[13] = 0;
-    dst[14] = near * far * rangeInv * 2;
-    dst[15] = 0;
-
-    // this.projection = Matrices.multiply(dst, Matrices.inverse(this.matrix)) ;
-
-    this.projection = dst;
-
-    return Matrices.multiply(dst, Matrices.inverse(this.matrix));
+    // this.fov = fov;
+    // this.near = near;
+    // this.far = far;
+    //
+    // dst = dst || new Float32Array(16);
+    // var f = Math.tan(Math.PI * 0.5 - 0.5 * fov);
+    // var rangeInv = 1.0 / (near - far);
+    //
+    // dst[ 0] = f / aspect;
+    // dst[ 1] = 0;
+    // dst[ 2] = 0;
+    // dst[ 3] = 0;
+    // dst[ 4] = 0;
+    // dst[ 5] = f;
+    // dst[ 6] = 0;
+    // dst[ 7] = 0;
+    // dst[ 8] = 0;
+    // dst[ 9] = 0;
+    // dst[10] = (near + far) * rangeInv;
+    // dst[11] = -1;
+    // dst[12] = 0;
+    // dst[13] = 0;
+    // dst[14] = near * far * rangeInv * 2;
+    // dst[15] = 0;
+    //
+    // // this.projection = Matrices.multiply(dst, Matrices.inverse(this.matrix)) ;
+    //
+    // this.projection = this.matrix;
+    //
+    // return Matrices.multiply(dst, Matrices.inverse(this.matrix));
   }
 
   orthographic(left, right, bottom, top, near, far, dst) {

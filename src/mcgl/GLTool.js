@@ -1,4 +1,5 @@
 import Matrices from './utils/Matrices'
+import glmatrix from 'gl-matrix';
 
 const getAttribLoc = function (gl, shaderProgram, name) {
 	if(shaderProgram.cacheAttribLoc === undefined) {	shaderProgram.cacheAttribLoc = {};	}
@@ -22,6 +23,12 @@ class GLTool {
     this.camera = null;
     this.shader = null;
     this.shaderProgram = null;
+		this.inverseViewMatrix = glmatrix.mat4.create();
+		this.modelMatrix = glmatrix.mat4.create();
+		this.identityMatrix          = glmatrix.mat4.create();
+		this.matrix          = glmatrix.mat4.create();
+		glmatrix.mat4.identity(this.identityMatrix, this.identityMatrix);
+
 
     this._enabledVertexAttribute = [];
     this._lastMesh				 = null;
@@ -43,6 +50,15 @@ class GLTool {
 
   setMatrices(camera) {
 		this.camera = camera;
+		this.rotate(this.identityMatrix);
+	}
+
+	rotate(rotation) {
+		glmatrix.mat4.copy(this.modelMatrix, rotation);
+		glmatrix.mat4.multiply(this.matrix, this.camera.matrix, this.modelMatrix);
+
+		glmatrix.mat3.fromMat4(this.inverseViewMatrix, this.matrix);
+		glmatrix.mat3.invert(this.inverseViewMatrix, this.inverseViewMatrix);
 	}
 
   draw(mMesh, mDrawingType){
@@ -51,9 +67,13 @@ class GLTool {
 			this._bindBuffers(mMesh);
 		}
 
+		// console.log(this.inverseViewMatrix);
+
     if(this.camera && this.camera !== undefined && this.camera.projection) {
-			this.shader.uniform('u_worldViewProjection', 'mat4', this.camera.projection);
-			this.shader.uniform('u_world', 'mat4', Matrices.inverse(this.camera.matrix));
+			this.shader.uniform('u_projectionMatrix', 'mat4', this.camera.projection);
+			this.shader.uniform('u_viewMatrix', 'mat4', this.camera.matrix);
+			this.shader.uniform('u_inverseViewMatrix', 'mat4', this.inverseViewMatrix);
+			this.shader.uniform('u_modelMatrix', 'mat4', this.modelMatrix);
 		}
 
     let drawType = mMesh.drawType;

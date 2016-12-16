@@ -130,13 +130,15 @@ class OrbitalControl {
       return;
     }
 
-    if((this.radius + e.deltaY > this.bounds[2][0] && this.radius + e.deltaY < this.bounds[2][1])
-    || (this.radius <= this.bounds[2][0] && e.deltaY >= 0)
-    || (this.radius >= this.bounds[2][1] && e.deltaY <= 0)){
-      this.radius += e.deltaY;
-    }
+    let add = e.deltaY * .01;
 
-    this._lastScroll = e.deltaY;
+    // if((this.radius + e.deltaY > this.bounds[2][0] && this.radius + e.deltaY < this.bounds[2][1])
+    // || (this.radius <= this.bounds[2][0] && add >= 0)
+    // || (this.radius >= this.bounds[2][1] && add <= 0)){
+      this.radius += add;
+    // }
+
+    this._lastScroll = add;
   }
 
   _addEvents(){
