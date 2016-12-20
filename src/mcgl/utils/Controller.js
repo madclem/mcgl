@@ -13,6 +13,10 @@ class Controller {
       this.onKeyPressed.dispatch("space");
     });
 
+    this.keyboard.onKeyPress('p', ()=> {
+      this.onKeyPressed.dispatch("p");
+    });
+
 
     // var el = document.getElementsByTagName("canvas")[0];
     window.addEventListener("touchstart", ()=>{

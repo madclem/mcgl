@@ -1,8 +1,9 @@
 import GLTool from "./mcgl/GLTool";
 import GLShader from "./mcgl/GLShader";
 import Texture from "./mcgl/Texture";
-import Camera from "./mcgl/cameras/Camera";
+import Camera from "./mcgl/cameras/index-camera.js";
 import OrbitalControl from "./mcgl/OrbitalControl";
+import CameraControl from "./mcgl/CameraControl";
 import Geom from "./mcgl/geometry/index-geom";
 import Controller from "./mcgl/utils/Controller";
 import Easings from "./mcgl/utils/Easings";
@@ -15,8 +16,9 @@ class Mcgl {
     this.GL = GLTool;
     this.GLTool = GLTool;
     this.GLShader = GLShader;
-    this.camera = new Camera();
+    this.camera = Camera;
     this.orbitalControl = new OrbitalControl();
+    this.CameraControl = CameraControl;
     this.geom = Geom;
     this.Mesh = Mesh;
     this.Texture = Texture;

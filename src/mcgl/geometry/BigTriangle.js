@@ -11,11 +11,11 @@ class BigTriangle extends Mesh {
   }
 
   bigTriangle(){
-  	const indices = [2, 1, 0];
+  	const indices = [0, 1, 2];
   	const positions = [
-  		[-1 * 1000, -1 *1000],
-  		[-1*1000, 4*1000],
-  		[4*1000, -1*1000]
+  		[-1 * 10000, -1 *10000],
+  		[-1*10000, 4*10000],
+  		[4*10000, -1*10000]
   	];
 
   	this.bufferData(positions, 'a_position', 2);
